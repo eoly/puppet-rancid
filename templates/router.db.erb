@@ -1,0 +1,4 @@
+<%- @rancid_devices[@groupname].each_pair do |key, hash| -%>
+<%=hash['hostname']-%>:<%=hash['type']-%>:<%=hash['status']-%>
+
+<%- end -%>
