@@ -22,7 +22,7 @@ class rancid::package {
       owner   => $rancid_uid,
       group   => $rancid_gid,
       mode    => '0750',
-      require => User[ 'rancid' ],
+      require => User[ $rancid_uid ],
     }
 
     file { 'homedir':
@@ -31,12 +31,12 @@ class rancid::package {
       owner   => $rancid_uid,
       group   => $rancid_uid,
       mode    => '0750',
-      require => User[ 'rancid' ],
+      require => User[ $rancid_uid ],
     }
 
     package { $rancid_packages:
       ensure  => 'present',
-      require => [ File[ 'logdir' ], File[ 'homedir' ], User[ 'rancid' ], Group[ 'rancid' ] ]
+      require => [ File[ 'logdir' ], File[ 'homedir' ], User[ $rancid_uid ], Group[ $rancid_gid ] ]
     }
 
     file { $rancid_main_config:
