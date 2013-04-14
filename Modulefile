@@ -1,0 +1,7 @@
+name    'eolsen-rancid'
+version '0.0.1'
+source 'git://github.com/eoly/puppet-rancid'
+license 'Apache License, Version 2.0'
+summary 'Install and configure Rancid package.'
+description 'This module manages the installation and management of Rancid.'
+project_page 'https://github.com/eoly/puppet-rancid'
