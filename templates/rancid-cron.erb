@@ -1,0 +1,9 @@
+# This file is being maintained by Puppet.
+# DO NOT EDIT
+SHELL=/bin/bash
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+MAILTO=root
+HOME=<%= @homedir_real %>
+
+# Run config differ hourly
+1 * * * * <%= @user_real %> rancid-run
