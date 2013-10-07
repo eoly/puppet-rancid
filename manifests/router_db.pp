@@ -1,21 +1,28 @@
-define rancid::router_db ($groupname = $title) {
-  
-  exec { "rancid-cvs-${groupname}":
-    command => "rancid-cvs ${groupname}",
-    path    => '/usr/bin:/usr/lib/rancid/bin',
-    user    => $rancid::params::rancid_uid,
-    unless  => "find /var/lib/rancid/${groupname} -type f -name router.db"
+# == Define: rancid::router_db
+#
+define rancid::router_db (
+  $devices         = undef,
+  $rancid_cvs_path = '/bin:/usr/bin',
+  $router_db_mode  = '0640',
+) {
+
+  exec { "rancid-cvs-${name}":
+    command => "rancid-cvs ${name}",
+    path    => $rancid_cvs_path,
+    user    => $rancid::user_real,
+    unless  => "test -d ${rancid::homedir_real}/${name}/CVS",
   }
 
-  $rancid_devices = hiera("rancid::rancid_devices",undef)
-  if ( $rancid_devices["${groupname}"] ) {
-    file { "/var/lib/rancid/${groupname}/router.db":
+  if ( $devices[$name] ) {
+    file { "${rancid::homedir_real}/${name}/router.db":
       ensure  => 'present',
-      owner   => $rancid_uid,
-      group   => $rancid_gid,
-      mode    => '0644',
-      content => template("${module_name}/${rancid_router_db_tpl}"),
-      require => Exec[ "rancid-cvs-${groupname}" ],
+      owner   => $rancid::user_real,
+      group   => $rancid::group_real,
+      mode    => $router_db_mode,
+      content => template('rancid/router.db.erb'),
+      require => Exec["rancid-cvs-${name}"],
     }
+  } else {
+    notify { "rancid::router_db -- ${name} not found in devices hash.": }
   }
 }
