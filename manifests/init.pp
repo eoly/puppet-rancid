@@ -42,7 +42,7 @@ class rancid (
       $default_rancid_path_env = '/usr/lib/rancid/bin:/bin:/usr/bin:/usr/local/bin'
     }
     'RedHat': {
-      case $::operatingsystemmajrelease {
+      case $::lsbmajdistrelease {
         '6': {
           $default_packages        = [ 'rancid' ]
           $default_rancid_config   = '/etc/rancid/rancid.conf'
