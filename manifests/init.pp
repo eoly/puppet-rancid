@@ -159,7 +159,7 @@ class rancid (
     name    => $user_real,
     gid     => $group_real,
     shell   => $shell_real,
-    home   => $homedir,
+    home   => $homedir_real,
     require => Package['rancid_packages'],
   }
 
