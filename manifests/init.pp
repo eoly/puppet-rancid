@@ -199,10 +199,13 @@ class rancid (
     require => Package['rancid_packages'],
   }
 
-  rancid::router_db { $groups:
-    devices   => $devices,
-    subscribe => File['rancid_config'],
-    require   => Package['rancid_packages'],
+  if ( $devices ) {
+    rancid::router_db { $groups:
+      devices         => $devices,
+      rancid_cvs_path => $rancid_path_env_real,
+      subscribe       => File['rancid_config'],
+      require         => Package['rancid_packages'],
+    }
   }
 
   file { 'rancid_cloginrc':
