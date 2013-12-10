@@ -1,10 +1,10 @@
 name    'eolsen-rancid'
-version '0.1.0'
+version '0.1.1'
 source 'https://github.com/eoly/puppet-rancid.git'
 author 'eolsen'
 license 'Apache License, Version 2.0'
 summary 'Manage RANCID'
-description 'Manages RANCID including configuring your devices in their group's router.db files.'
+description 'Manages RANCID including configuring your devices in their groups router.db files.'
 project_page 'https://github.com/eoly/puppet-rancid'
 
 dependency 'puppetlabs/stdlib',  '3.2.x'
