@@ -142,16 +142,15 @@ class rancid (
   $cloginrc_path = "${homedir_real}/.cloginrc"
   validate_absolute_path($cloginrc_path)
 
-  package { 'rancid_packages':
+  package { $packages_real:
     ensure => present,
-    name   => $packages_real,
   }
 
   group { 'rancid_group':
     ensure  => present,
     name    => $group_real,
     system  => true,
-    require => Package['rancid_packages'],
+    require => Package[$packages_real],
   }
 
   user { 'rancid_user':
@@ -160,7 +159,7 @@ class rancid (
     gid     => $group_real,
     shell   => $shell_real,
     home    => $homedir_real,
-    require => Package['rancid_packages'],
+    require => Package[$packages_real],
   }
 
   file { 'logdir':
@@ -186,7 +185,7 @@ class rancid (
     group   => $group_real,
     mode    => '0640',
     content => template('rancid/rancid.conf.erb'),
-    require => Package['rancid_packages'],
+    require => Package[$packages_real],
   }
 
   file { 'rancid_cron_d_file':
@@ -196,7 +195,7 @@ class rancid (
     group   => 'root',
     mode    => '0644',
     content => template('rancid/rancid-cron.erb'),
-    require => Package['rancid_packages'],
+    require => Package[$packages_real],
   }
 
   if ( $devices ) {
@@ -204,7 +203,7 @@ class rancid (
       devices         => $devices,
       rancid_cvs_path => $rancid_path_env_real,
       subscribe       => File['rancid_config'],
-      require         => Package['rancid_packages'],
+      require         => Package[$packages_real],
     }
   }
 
