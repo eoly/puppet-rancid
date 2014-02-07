@@ -7,4 +7,4 @@ summary 'Manage RANCID'
 description 'Manages RANCID including configuring your devices in their groups router.db files.'
 project_page 'https://github.com/eoly/puppet-rancid'
 
-dependency 'puppetlabs/stdlib',  '3.2.x'
+dependency 'puppetlabs/stdlib',  '>=3.2.0'
