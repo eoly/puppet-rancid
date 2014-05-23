@@ -125,7 +125,7 @@ class rancid (
   validate_re($parcount, '^(\d)+$', "rancid::parcount is ${parcount} and must match the regex of a number.")
   # use is_domain_name to check validity of $domainname
   if (! is_domain_name($maildomain)) {
-    err("rancid::maildomain is ${maildomain} and must be a valid domain name")
+    fail("rancid::maildomain is ${maildomain} and must be a valid domain name")
   }
 
   $groups_type = type($groups)
