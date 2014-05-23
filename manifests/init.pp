@@ -9,7 +9,7 @@ class rancid (
   $oldtime          = '4',
   $locktime         = '4',
   $parcount         = '5',
-  $maildomain       = $::domain,
+  $maildomain       = undef,
   $groups           = [ 'routers', 'switches', 'firewalls' ],
   $devices          = undef,
   $packages         = 'USE_DEFAULTS',
@@ -123,7 +123,9 @@ class rancid (
   validate_re($oldtime, '^(\d)+$', "rancid::oldtime is ${oldtime} and must match the regex of a number.")
   validate_re($locktime, '^(\d)+$', "rancid::locktime is ${locktime} and must match the regex of a number.")
   validate_re($parcount, '^(\d)+$', "rancid::parcount is ${parcount} and must match the regex of a number.")
-  validate_re($maildomain,'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$',"rancid::maildomain is ${maildomain} and must be a valid domain name")
+  if ($maildomain != undef ) {
+    validate_re($maildomain,'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$',"rancid::maildomain is ${maildomain} and must be a valid domain name")
+  }
 
   $groups_type = type($groups)
   if $groups_type != 'array' {
