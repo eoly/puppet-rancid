@@ -26,7 +26,7 @@ class rancid (
 
   # set default parameters
 
-  $default_cloginrc_content = '# This file is being maintained by Puppet.\n# DO NOT EDIT\nConsult man page for cloginrc(5) for help.'
+  $default_cloginrc_content = "# This file is being maintained by Puppet.\n# DO NOT EDIT\nConsult man page for cloginrc(5) for help."
 
   case $::osfamily {
     default: {
