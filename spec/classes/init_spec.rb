@@ -3,8 +3,8 @@ describe 'rancid' do
 
   context 'with default params on EL 6' do
     let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
+      { :osfamily                   => 'RedHat',
+        :operatingsystemmajrelease  => '6',
       }
     end
 
