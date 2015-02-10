@@ -2,7 +2,7 @@
   "name": "eolsen-rancid",
   "version": "0.2.0",
   "author": "eolsen",
-  "summary": "Manage RANCID"
+  "summary": "Manage RANCID",
   "description": "Manages RANCID including configuring your devices in their groups router.db files.",
   "license": "Apache 2.0",
   "source": "http://github.com/eoly/puppet-rancid",
