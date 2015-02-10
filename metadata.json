@@ -1,0 +1,17 @@
+{
+  "name": "eolsen-rancid",
+  "version": "0.2.0",
+  "author": "eolsen",
+  "summary": "Manage RANCID"
+  "description": "Manages RANCID including configuring your devices in their groups router.db files.",
+  "license": "Apache 2.0",
+  "source": "http://github.com/eoly/puppet-rancid",
+  "project_page": "https://github.com/eoly/puppet-rancid",
+  "issues_url": "https://github.com/eoly/puppet-rancid/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 3.2.0"
+    }
+  ]
+}

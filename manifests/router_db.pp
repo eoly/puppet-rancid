@@ -9,15 +9,15 @@ define rancid::router_db (
   exec { "rancid-cvs-${name}":
     command => "rancid-cvs ${name}",
     path    => $rancid_cvs_path,
-    user    => $rancid::user_real,
-    unless  => "test -d ${rancid::homedir_real}/${name}/CVS",
+    user    => $::rancid::user,
+    unless  => "test -d ${::rancid::homedir}/${name}/CVS",
   }
 
   if ( $devices[$name] ) {
-    file { "${rancid::homedir_real}/${name}/router.db":
+    file { "${::rancid::homedir}/${name}/router.db":
       ensure  => 'present',
-      owner   => $rancid::user_real,
-      group   => $rancid::group_real,
+      owner   => $::rancid::user,
+      group   => $::rancid::group,
       mode    => $router_db_mode,
       content => template('rancid/router.db.erb'),
       require => Exec["rancid-cvs-${name}"],
