@@ -1,4 +1,4 @@
-<%- @devices[@name].sort_by {|key,hash| key}.each do |key, hash| -%>
+<%- @devices[@name].each_pair do |key, hash| -%>
 <%=hash['hostname']-%>:<%=hash['type']-%>:<%=hash['status']-%>
 
 <%- end -%>
