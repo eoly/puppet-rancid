@@ -127,14 +127,12 @@ class rancid (
     validate_re($maildomain,'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$',"rancid::maildomain is ${maildomain} and must be a valid domain name")
   }
 
-  $groups_type = type($groups)
-  if $groups_type != 'array' {
-    fail("rancid::groups must be an array. Detected type is ${groups_type}.")
+  if !is_array($groups) {
+    fail("rancid::groups must be an array.")
   }
 
-  $packages_type = type($packages)
-  if $packages_type != 'array' and $packages_type != 'string' {
-    fail("rancid::packages must be an array or a string. Detected type is ${packages_type}.")
+  if !is_array($packages) and !is_string($packages) {
+    fail("rancid::packages must be an array or a string.")
   }
 
   validate_absolute_path($rancid_config_real)
