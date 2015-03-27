@@ -127,9 +127,7 @@ class rancid (
     validate_re($maildomain,'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$',"rancid::maildomain is ${maildomain} and must be a valid domain name")
   }
 
-  if !is_array($groups) {
-    fail('rancid::groups must be an array.')
-  }
+  validate_array($groups)
 
   if !is_array($packages) and !is_string($packages) {
     fail('rancid::packages must be an array or a string.')
