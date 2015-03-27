@@ -1,5 +1,5 @@
 name    'eolsen-rancid'
-version '0.1.3'
+version '0.1.4'
 source 'https://github.com/eoly/puppet-rancid.git'
 author 'eolsen'
 license 'Apache License, Version 2.0'
