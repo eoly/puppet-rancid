@@ -26,7 +26,8 @@ class rancid (
 
   # set default parameters
 
-  $default_cloginrc_content = "# This file is being maintained by Puppet.\n# DO NOT EDIT\nConsult man page for cloginrc(5) for help."
+  $default_cloginrc_content = "# This file is being maintained by Puppet.\n# \
+  DO NOT EDIT\nConsult man page for cloginrc(5) for help."
 
   case $::osfamily {
     default: {
@@ -55,7 +56,36 @@ class rancid (
           $default_rancid_path_env = '/usr/libexec/rancid:/bin:/usr/bin:/usr/local/bin'
         }
         default: {
-          fail("Rancid supports osfamily RedHat release 6. Detected operatingsystemmajrelease is <${::operatingsystemmajrelease}>.")
+          fail("Rancid supports osfamily RedHat release 6. Detected \
+            operatingsystemmajrelease is <${::operatingsystemmajrelease}>.")
+        }
+      }
+      'CentOS': {
+        case $::operatingsystemmajrelease {
+          '6': {
+            $default_packages        = [ 'rancid' ]
+            $default_rancid_config   = '/etc/rancid/rancid.conf'
+            $default_user            = 'rancid'
+            $default_group           = 'rancid'
+            $default_shell           = '/bin/bash'
+            $default_homedir         = '/var/rancid'
+            $default_logdir          = '/var/log/rancid'
+            $default_rancid_path_env = '/usr/libexec/rancid:/bin:/usr/bin:/usr/local/bin'
+          }
+          '7': {
+            $default_packages        = [ 'rancid' ]
+            $default_rancid_config   = '/etc/rancid/rancid.conf'
+            $default_user            = 'rancid'
+            $default_group           = 'rancid'
+            $default_shell           = '/bin/bash'
+            $default_homedir         = '/var/rancid'
+            $default_logdir          = '/var/log/rancid'
+            $default_rancid_path_env = '/usr/libexec/rancid:/bin:/usr/bin:/usr/local/bin'
+          }
+          default: {
+            fail("Puppet-Rancid only supports CentOS 6 and 7. Your release is \
+              detected as CentOS <${::operatingsystemmajrelease}>.")
+          }
         }
       }
     }
@@ -118,19 +148,30 @@ class rancid (
   # validate parameters
   validate_re($filterpwds, '^(yes|YES|no|NO|all|ALL)$',
     "rancid::filterpwds is <${filterpwds}> which does not match the regex of \'YES\', \'NO\', or \'ALL\'.")
-  validate_re($nocommstr, '^(yes|YES|no|NO)$', "rancid::nocommstr is <${nocommstr}> which does not match the regex of \'YES\' or \'NO\'.")
-  validate_re($maxrounds, '^[1-9]+(\d)?$', "rancid::maxrounds is ${maxrounds} and must be a number greater than zero.")
-  validate_re($oldtime, '^(\d)+$', "rancid::oldtime is ${oldtime} and must match the regex of a number.")
-  validate_re($locktime, '^(\d)+$', "rancid::locktime is ${locktime} and must match the regex of a number.")
-  validate_re($parcount, '^(\d)+$', "rancid::parcount is ${parcount} and must match the regex of a number.")
+  validate_re($nocommstr, '^(yes|YES|no|NO)$', "rancid::nocommstr is \
+    <${nocommstr}> which does not match the regex of \'YES\' or \'NO\'.")
+  validate_re($maxrounds, '^[1-9]+(\d)?$', "rancid::maxrounds is ${maxrounds} \
+    and must be a number greater than zero.")
+  validate_re($oldtime, '^(\d)+$', "rancid::oldtime is ${oldtime} and must \
+    match the regex of a number.")
+  validate_re($locktime, '^(\d)+$', "rancid::locktime is ${locktime} and must \
+    match the regex of a number.")
+  validate_re($parcount, '^(\d)+$', "rancid::parcount is ${parcount} and must \
+    match the regex of a number.")
   if ($maildomain != undef ) {
-    validate_re($maildomain,'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$',"rancid::maildomain is ${maildomain} and must be a valid domain name")
+    validate_re($maildomain,'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$',
+      "rancid::maildomain is ${maildomain} and must be a valid domain name")
   }
 
   validate_array($groups)
 
   if !is_array($packages) and !is_string($packages) {
     fail('rancid::packages must be an array or a string.')
+  }
+
+  if ($rcs != undef ) {
+    validate_re($rcs, '^(cvs|CVS|svn|SVN|git|GIT)$',
+      "rancid::rcs is <${rcs}>, but should be one of \'CVS\', \'SVN\' or \'GIT\'.")
   }
 
   validate_absolute_path($rancid_config_real)

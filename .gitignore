@@ -29,3 +29,7 @@ doc/
 coverage/
 spec/fixtures/modules/*
 spec/fixtures
+
+#Sublime Text 2/3
+*.sublime-project
+*.sublime-workspace

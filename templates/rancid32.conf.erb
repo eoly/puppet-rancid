@@ -1,16 +1,25 @@
-# This file is being maintained by Puppet.
-# DO NOT EDIT
-#
-# rancid 2.3.6 and 3.2
+# rancid 3.2
 # This file sets up the environment used for rancid.  see rancid.conf(5)
 #
 # This will be site specific
 #
 TERM=network;export TERM
 #
+# Collating locale
+LC_COLLATE="POSIX"; export LC_COLLATE
+#
+# Check that the effective UID is not root, which could lead to permissions
+# problems for user who is supposed to be running rancid.  If you know what
+# you are doing, disable this check by commenting these lines.
+uid=`perl -e 'print "$>"'`
+test "$uid" -eq 0 && echo "Do not run $0 as root!" && exit 1
+#
 # Create files w/o world read/write/exec permissions, but read/exec permissions
 # for group.
 umask 027
+#
+# Set the perl module search path.  perl -V shows the default
+PERL5LIB="/usr/share/perl5/vendor_perl/rancid"; export PERL5LIB
 #
 # Under BASEDIR (i.e.: --localstatedir), there will be a "logs" directory for
 # the logs from rancid and a directory for each group of routers defined in
@@ -20,9 +29,16 @@ umask 027
 # Use a full path (no sym-links) for BASEDIR.
 #
 TMPDIR=/tmp; export TMPDIR
-# Be careful changing this, it affects CVSROOT below.
-BASEDIR=<%= @homedir_real %>; export BASEDIR
-PATH=<%= @rancid_path_env_real %>; export PATH
+# Be careful changing this, it affects CVSROOT below.  It should be a FQPN, not
+# relative.
+BASEDIR=/var/rancid; export BASEDIR
+PATH=/usr/libexec/rancid:/usr/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/bin; export PATH
+#
+# Set to the name of the sendmail executable (or script) that will accept the
+# -t option to take its rcpt and other headers from std-in and $MAILOPTS (see
+# below).
+#SENDMAIL="/usr/sbin/sendmail"
+#
 # Location of the CVS/SVN/GIT repository.  Be careful changing this.
 # If RCSSYS is svn or git, this can be:
 # - an (absolute) path (a subdirectory of BASEDIR by default).  BASEDIR/CVS,
@@ -34,14 +50,12 @@ PATH=<%= @rancid_path_env_real %>; export PATH
 #     commands can run, e.g. by running rancid-cvs after installation.
 CVSROOT=$BASEDIR/CVS; export CVSROOT
 # Location of log files produced by rancid-run(1).
-LOGDIR=<%= @logdir_real %>; export LOGDIR
+LOGDIR=/var/log/rancid; export LOGDIR
 #
 # Select which RCS system to use, "cvs" (default), "svn" or "git".  Do not
 # change this after CVSROOT has been created with rancid-cvs.  Changing between
 # these requires manual conversions.
-<%- if @rcs -%>
-RCSSYS=<%= @rcs %>; export RCSSYS
-<%- end -%>
+RCSSYS=git; export RCSSYS
 #
 # if ACLSORT is NO, access-lists will NOT be sorted.
 #ACLSORT=YES; export ACLSORT
@@ -52,46 +66,57 @@ RCSSYS=<%= @rcs %>; export RCSSYS
 #
 # FILTER_PWDS determines which passwords are filtered from configs by the
 # value set (NO | YES | ALL).  see rancid.conf(5).
-FILTER_PWDS="<%= @filterpwds %>"; export FILTER_PWDS
+#FILTER_PWDS=YES; export FILTER_PWDS
 #
 # if NOCOMMSTR is set, snmp community strings will be stripped from the configs
-NOCOMMSTR="<%= @nocommstr %>"; export NOCOMMSTR
+#NOCOMMSTR=YES; export NOCOMMSTR
 #
 # How many times failed collections are retried (for each run) before
-# giving up.  Minimum: 1
-MAX_ROUNDS="<%= @maxrounds %>"; export MAX_ROUNDS
+# giving up.  Minimum: 0
+#MAX_ROUNDS=4; export MAX_ROUNDS
 #
 # How many hours should pass before complaining about routers that
 # can not be reached.  The value should be greater than the number
 # of hours between your rancid-run cron job.  Default: 24
-OLDTIME="<%= @oldtime %>"; export OLDTIME
+#OLDTIME=4; export OLDTIME
 #
 # How many hours should pass before complaining that a group's collection
 # (the age of it's lock file) is hung.
-LOCKTIME="<%= @locktime %>"; export LOCKTIME
+#LOCKTIME=4; export LOCKTIME
 #
 # The number of devices to collect simultaneously.
-PAR_COUNT="<%= @parcount %>"; export PAR_COUNT
+#PAR_COUNT=5; export PAR_COUNT
 #
 # list of rancid groups
-LIST_OF_GROUPS="<%= @groups.flatten.join(' ') %>"
+#LIST_OF_GROUPS="sl joebobisp"
+# more groups...
+#LIST_OF_GROUPS="$LIST_OF_GROUPS noc billybobisp"
+#
+# Define an alternate filter for the output of the RCS diff.  The filter
+# should read from stdin and write to stdout.  The default is defined in
+# control_rancid and just improves readability.
+#DIFFSCRIPT="filter1 | filter2"; export DIFFSCRIPT
 #
 # For each group, define a list of people to receive the diffs.
 # in sendmail's /etc/aliases.
-#   rancid-group:	joe,moe@foo
-#   rancid-admin-group:	hostmaster
+#   rancid-group:       joe,moe@foo
+#   rancid-admin-group: hostmaster
 # be sure to read ../README regarding aliases.
 #
 # If your MTA configuration is broken or you want mail to be forwarded to a
 # domain not the same as the local one, define that domain here.  "@" must be
 # included, as this is simply appended to the usual recipients.  It is NOT
 # appended to recipients specified in rancid-run's -m option.
-<%- if @maildomain -%>
-MAILDOMAIN="<%= @maildomain %>"; export MAILDOMAIN
-<%- end -%>
+#MAILDOMAIN="@example.com"; export MAILDOMAIN
 #
-# By default, rancid mail is marked with precedence "bulk".  This may be
-# changed by setting the MAILHEADERS variable; for example no header by setting
-# it to "" or adding X- style headers.  Individual headers must be separated
-# by a \n.
-#MAILHEADERS="Precedence: bulk"; export MAILHEADERS
+# By default, rancid mail is marked with precedence "bulk" and etc, as in the
+# example.  This may be changed by setting the MAILHEADERS variable; for
+# example no header by setting it to "" or adding X- style headers.  Individual
+# headers must be separated by a \n.
+#MAILHEADERS="Precedence: bulk\nAuto-submitted: auto-generated\nX-Auto-Response-Suppress: All"; export MAILHEADERS
+#
+# Additional options for sendmail(8).
+#MAILOPTS="-f bounces.go.here@example.com"; export MAILOPTS
+#
+# Split diffs larger then N kbytes
+#MAILSPLIT=0; export MAILSPLIT
