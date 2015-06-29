@@ -185,8 +185,11 @@ Mode of <tt>router.db</tt> files.
 rcs
 ---
 Determines which revision control system rancid uses:
+
     SVN - Uses subversion
+
     CVS - Uses the concurrent version system
+
     GIT - Uses GIT
 
 Note: Do not change this after CVSROOT has been created with rancid-cvs.  Changing between these requires manual conversions.
