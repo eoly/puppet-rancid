@@ -16,6 +16,7 @@ capability to add router entries to your router.db file with Hiera. Also manages
 Compatible with Puppet v3 with Ruby versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0 on the following platforms.
 
 * EL 6 (rancid package from [EPEL](https://fedoraproject.org/wiki/EPEL))
+* CentOS 7 (rancid package from [EPEL](https://fedoraproject.org/wiki/EPEL))
 * Ubuntu 12.04 LTS
 
 ===
@@ -180,6 +181,18 @@ router_db_mode
 Mode of <tt>router.db</tt> files.
 
 - *Default*: '0640',
+
+rcs
+---
+Determines which revision control system rancid uses:
+    SVN - Uses subversion
+    CVS - Uses the concurrent version system
+    GIT - Uses GIT
+
+Note: Do not change this after CVSROOT has been created with rancid-cvs.  Changing between these requires manual conversions.
+
+- *Default*: 'CVS',
+
 
 ===
 

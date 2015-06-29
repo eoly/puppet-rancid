@@ -10,6 +10,7 @@ class rancid (
   $locktime         = '4',
   $parcount         = '5',
   $maildomain       = undef,
+  $rcs              = undef,
   $groups           = [ 'routers', 'switches', 'firewalls' ],
   $devices          = undef,
   $packages         = 'USE_DEFAULTS',
@@ -60,32 +61,32 @@ class rancid (
             operatingsystemmajrelease is <${::operatingsystemmajrelease}>.")
         }
       }
-      'CentOS': {
-        case $::operatingsystemmajrelease {
-          '6': {
-            $default_packages        = [ 'rancid' ]
-            $default_rancid_config   = '/etc/rancid/rancid.conf'
-            $default_user            = 'rancid'
-            $default_group           = 'rancid'
-            $default_shell           = '/bin/bash'
-            $default_homedir         = '/var/rancid'
-            $default_logdir          = '/var/log/rancid'
-            $default_rancid_path_env = '/usr/libexec/rancid:/bin:/usr/bin:/usr/local/bin'
-          }
-          '7': {
-            $default_packages        = [ 'rancid' ]
-            $default_rancid_config   = '/etc/rancid/rancid.conf'
-            $default_user            = 'rancid'
-            $default_group           = 'rancid'
-            $default_shell           = '/bin/bash'
-            $default_homedir         = '/var/rancid'
-            $default_logdir          = '/var/log/rancid'
-            $default_rancid_path_env = '/usr/libexec/rancid:/bin:/usr/bin:/usr/local/bin'
-          }
-          default: {
-            fail("Puppet-Rancid only supports CentOS 6 and 7. Your release is \
-              detected as CentOS <${::operatingsystemmajrelease}>.")
-          }
+    }
+    'CentOS': {
+      case $::operatingsystemmajrelease {
+        '6': {
+          $default_packages        = [ 'rancid' ]
+          $default_rancid_config   = '/etc/rancid/rancid.conf'
+          $default_user            = 'rancid'
+          $default_group           = 'rancid'
+          $default_shell           = '/bin/bash'
+          $default_homedir         = '/var/rancid'
+          $default_logdir          = '/var/log/rancid'
+          $default_rancid_path_env = '/usr/libexec/rancid:/bin:/usr/bin:/usr/local/bin'
+        }
+        '7': {
+          $default_packages        = [ 'rancid' ]
+          $default_rancid_config   = '/etc/rancid/rancid.conf'
+          $default_user            = 'rancid'
+          $default_group           = 'rancid'
+          $default_shell           = '/bin/bash'
+          $default_homedir         = '/var/rancid'
+          $default_logdir          = '/var/log/rancid'
+          $default_rancid_path_env = '/usr/libexec/rancid:/bin:/usr/bin:/usr/local/bin'
+        }
+        default: {
+          fail("Puppet-Rancid only supports CentOS 6 and 7. Your release is \
+            detected as CentOS <${::operatingsystemmajrelease}>.")
         }
       }
     }
