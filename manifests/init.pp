@@ -35,7 +35,7 @@ class rancid (
       notify { "Rancid is unsupported for ${::operatingsystem}.": }
     }
     'Debian': {
-      $default_packages        = [ 'rancid' ]
+      $default_packages        = [ 'rancid', 'git', 'subversion', 'cvs' ]
       $default_rancid_config   = '/etc/rancid/rancid.conf'
       $default_user            = 'rancid'
       $default_group           = 'rancid'
