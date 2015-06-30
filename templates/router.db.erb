@@ -1,4 +1,4 @@
 <%- @devices[@name].each_pair do |key, hash| -%>
-<%=hash['hostname']-%>:<%=hash['type']-%>:<%=hash['status']-%>
+<%=hash['hostname']-%>;<%=hash['type']-%>;<%=hash['status']-%>
 
 <%- end -%>
