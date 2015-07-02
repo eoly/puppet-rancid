@@ -10,7 +10,9 @@ class rancid (
   $locktime         = '4',
   $parcount         = '5',
   $maildomain       = undef,
+  $nopipe           = 'NO', # yes on CentOS 7
   $rcs              = undef,
+  $cvsroot          = '\$BASEDIR/CVS'
   $groups           = [ 'routers', 'switches', 'firewalls' ],
   $devices          = undef,
   $packages         = 'USE_DEFAULTS',
@@ -47,7 +49,7 @@ class rancid (
     'RedHat': {
       case $::operatingsystemmajrelease {
         '6': {
-          $default_packages        = [ 'rancid' ]
+          $default_packages        = [ 'rancid', 'git', 'subversion', 'cvs' ]
           $default_rancid_config   = '/etc/rancid/rancid.conf'
           $default_user            = 'rancid'
           $default_group           = 'rancid'
@@ -57,7 +59,22 @@ class rancid (
           $default_rancid_path_env = '/usr/libexec/rancid:/bin:/usr/bin:/usr/local/bin'
         }
         '7': {
-          $default_packages        = [ 'rancid' ]
+          if $rcs != undef {
+            case $rcs {
+              'git': {
+                $default_packages  = [ 'rancid', 'git' ]
+              }
+              'svn': {
+                $default_packages  = [ 'rancid', 'subversion' ]
+              }
+              'cvs': {
+                $default_packages  = [ 'rancid', 'cvs' ]
+              }
+              default: {
+                $default_packages  = [ 'rancid', 'cvs' ]
+              }
+            }
+          }
           $default_rancid_config   = '/etc/rancid/rancid.conf'
           $default_user            = 'rancid'
           $default_group           = 'rancid'
@@ -145,6 +162,8 @@ operatingsystemmajrelease is <${::operatingsystemmajrelease}>.")
     validate_re($maildomain,'^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$',
       "rancid::maildomain is ${maildomain} and must be a valid domain name")
   }
+  validate_re($nopipe, '^(yes|YES|no|NO)$', "rancid::nopipe is <${rcs}> but \
+should be either \'yes\' or \'no\'")
 
   validate_array($groups)
 
@@ -156,6 +175,8 @@ operatingsystemmajrelease is <${::operatingsystemmajrelease}>.")
     validate_re($rcs, '^(cvs|CVS|svn|SVN|git|GIT)$',
       "rancid::rcs is <${rcs}>, but should be one of \'CVS\', \'SVN\' or \'GIT\'.")
   }
+
+  validate_string($cvsroot)
 
   validate_absolute_path($rancid_config_real)
   validate_absolute_path($homedir_real)

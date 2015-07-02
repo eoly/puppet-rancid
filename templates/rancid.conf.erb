@@ -32,7 +32,8 @@ PATH=<%= @rancid_path_env_real %>; export PATH
 #   - authentication credentials, if necessary, MUST be cached (see the SVN
 #     book, Ch. 3, Network Model, Caching credentials) before non-interactive
 #     commands can run, e.g. by running rancid-cvs after installation.
-CVSROOT=$BASEDIR/CVS; export CVSROOT
+# CVSROOT=$BASEDIR/CVS; export CVSROOT
+CVSROOT="<%= @cvsdir %>"; export CVSROOT
 # Location of log files produced by rancid-run(1).
 LOGDIR=<%= @logdir_real %>; export LOGDIR
 #
@@ -48,6 +49,9 @@ RCSSYS=<%= @rcs %>; export RCSSYS
 #
 # if NOPIPE is set, temp files will be used instead of a cmd pipe during
 # collection from the router(s).
+<%- if @nopipe -%>
+NOPIPE=<%= @nopipe %>; export NOPIPE
+<%- end -%>
 #NOPIPE=YES; export NOPIPE
 #
 # FILTER_PWDS determines which passwords are filtered from configs by the
@@ -74,7 +78,7 @@ LOCKTIME="<%= @locktime %>"; export LOCKTIME
 PAR_COUNT="<%= @parcount %>"; export PAR_COUNT
 #
 # list of rancid groups
-LIST_OF_GROUPS="<%= @groups.flatten.join(' ') %>"
+LIST_OF_GROUPS="<%= @groups.flatten.join(' ') %>"; export LIST_OF_GROUPS
 #
 # For each group, define a list of people to receive the diffs.
 # in sendmail's /etc/aliases.
