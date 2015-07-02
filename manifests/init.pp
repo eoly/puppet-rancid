@@ -12,7 +12,7 @@ class rancid (
   $maildomain       = undef,
   $nopipe           = 'NO', # yes on CentOS 7
   $rcs              = undef,
-  $cvsroot          = '\$BASEDIR/CVS'
+  $cvsroot          = '\$BASEDIR/CVS',
   $groups           = [ 'routers', 'switches', 'firewalls' ],
   $devices          = undef,
   $packages         = 'USE_DEFAULTS',
