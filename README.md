@@ -154,6 +154,12 @@ Content of <tt>~rancid/.cloginrc</tt>
 
 - *Default*: 'USE_DEFAULTS'
 
+show_cloginrc_diff
+------------------
+Whether to show diffs of <tt>~rancid/.cloginrc</tt> during puppet runs.
+
+- *Default*: true
+
 ===
 
 # define rancid::router_db
