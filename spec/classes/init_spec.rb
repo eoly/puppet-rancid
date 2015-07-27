@@ -11,17 +11,17 @@ describe 'rancid' do
     it { should compile.with_all_deps }
 
     context 'with show_cloginrc_diff unset' do
-      it {should contain_file('rancid_cloginrc').with_show_diff('true')}
+      it {should contain_file('rancid_cloginrc').with_show_diff(true)}
     end
 
     context 'with show_cloginrc_diff set to true' do
       let(:params) { {:show_cloginrc_diff => true} }
-      it {should contain_file('rancid_cloginrc').with_show_diff('true')}
+      it {should contain_file('rancid_cloginrc').with_show_diff(true)}
     end
 
     context 'with show_cloginrc_diff set to false' do
       let(:params) { {:show_cloginrc_diff => false} }
-      it {should contain_file('rancid_cloginrc').with_show_diff('false')}
+      it {should contain_file('rancid_cloginrc').with_show_diff(false)}
     end
   end
 
@@ -31,17 +31,17 @@ describe 'rancid' do
     it { should compile.with_all_deps }
 
     context 'with show_cloginrc_diff unset' do
-      it {should contain_file('rancid_cloginrc').with_show_diff('true')}
+      it {should contain_file('rancid_cloginrc').with_show_diff(true)}
     end
 
     context 'with show_cloginrc_diff set to true' do
       let(:params) { {:show_cloginrc_diff => true} }
-      it {should contain_file('rancid_cloginrc').with_show_diff('true')}
+      it {should contain_file('rancid_cloginrc').with_show_diff(true)}
     end
 
     context 'with show_cloginrc_diff set to false' do
       let(:params) { {:show_cloginrc_diff => false} }
-      it {should contain_file('rancid_cloginrc').with_show_diff('false')}
+      it {should contain_file('rancid_cloginrc').with_show_diff(false)}
     end
   end
 
