@@ -25,9 +25,9 @@ class rancid (
   $show_cloginrc_diff = true,
 ) {
 
-  # set default parameters
-
   $default_cloginrc_content = "# This file is being maintained by Puppet.\n# DO NOT EDIT\nConsult man page for cloginrc(5) for help."
+
+  $cloginrc_path = "${homedir_real}/.cloginrc"
 
   case $::osfamily {
     default: {
@@ -139,10 +139,9 @@ class rancid (
   validate_absolute_path($logdir_real)
   validate_absolute_path($shell_real)
   validate_absolute_path($cron_d_file)
-
-  $cloginrc_path = "${homedir_real}/.cloginrc"
   validate_absolute_path($cloginrc_path)
   validate_bool($show_cloginrc_diff)
+
   package { $packages_real:
     ensure => present,
   }
