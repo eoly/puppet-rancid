@@ -120,7 +120,7 @@ class rancid (
   validate_re($filterpwds, '^(yes|YES|no|NO|all|ALL)$',
     "rancid::filterpwds is <${filterpwds}> which does not match the regex of \'YES\', \'NO\', or \'ALL\'.")
   validate_re($nocommstr, '^(yes|YES|no|NO)$', "rancid::nocommstr is <${nocommstr}> which does not match the regex of \'YES\' or \'NO\'.")
-  validate_re($rcs_system, '^(svn|cvs)$', "rancid::rcs_system is <${rcs_system}> which does not match the supported systems 'cvs' or 'svn'.")
+  validate_re($rcs_system, '^(cvs|svn)$', "rancid::rcs_system is <${rcs_system}> and must be 'cvs' or 'svn'.")
   validate_re($maxrounds, '^[1-9]+(\d)?$', "rancid::maxrounds is ${maxrounds} and must be a number greater than zero.")
   validate_re($oldtime, '^(\d)+$', "rancid::oldtime is ${oldtime} and must match the regex of a number.")
   validate_re($locktime, '^(\d)+$', "rancid::locktime is ${locktime} and must match the regex of a number.")

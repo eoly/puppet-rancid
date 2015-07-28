@@ -154,6 +154,12 @@ Content of <tt>~rancid/.cloginrc</tt>
 
 - *Default*: 'USE_DEFAULTS'
 
+rcs_system
+----------
+Revision control system that RANCID will use. Available values are 'cvs' and 'svn'.
+
+- *Default*: 'cvs'
+
 ===
 
 # define rancid::router_db
