@@ -31,7 +31,7 @@ LOGDIR=<%= @logdir_real %>; export LOGDIR
 # Select which RCS system to use, "cvs" (default) or "svn".  Do not change
 # this after CVSROOT has been created with rancid-cvs.  Changing between these
 # requires manual conversions.
-RCSSYS=cvs; export RCSSYS
+RCSSYS=<%= @rcs_system %>; export RCSSYS
 #
 # if ACLSORT is NO, access-lists will NOT be sorted.
 #ACLSORT=YES; export ACLSORT
