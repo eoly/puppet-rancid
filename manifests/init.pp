@@ -3,30 +3,31 @@
 # Manage RANCID - http://www.shrubbery.net/rancid/
 #
 class rancid (
-  $filterpwds       = 'ALL', # yes, no, all
-  $nocommstr        = 'YES', # yes or no
-  $maxrounds        = '4',
-  $oldtime          = '4',
-  $locktime         = '4',
-  $parcount         = '5',
-  $maildomain       = undef,
-  $groups           = [ 'routers', 'switches', 'firewalls' ],
-  $devices          = undef,
-  $packages         = 'USE_DEFAULTS',
-  $rancid_config    = 'USE_DEFAULTS',
-  $rancid_path_env  = 'USE_DEFAULTS',
-  $homedir          = 'USE_DEFAULTS',
-  $logdir           = 'USE_DEFAULTS',
-  $user             = 'USE_DEFAULTS',
-  $group            = 'USE_DEFAULTS',
-  $shell            = 'USE_DEFAULTS',
-  $cron_d_file      = '/etc/cron.d/rancid',
-  $cloginrc_content = 'USE_DEFAULTS',
+  $filterpwds         = 'ALL', # yes, no, all
+  $nocommstr          = 'YES', # yes or no
+  $maxrounds          = '4',
+  $oldtime            = '4',
+  $locktime           = '4',
+  $parcount           = '5',
+  $maildomain         = undef,
+  $groups             = [ 'routers', 'switches', 'firewalls' ],
+  $devices            = undef,
+  $packages           = 'USE_DEFAULTS',
+  $rancid_config      = 'USE_DEFAULTS',
+  $rancid_path_env    = 'USE_DEFAULTS',
+  $homedir            = 'USE_DEFAULTS',
+  $logdir             = 'USE_DEFAULTS',
+  $user               = 'USE_DEFAULTS',
+  $group              = 'USE_DEFAULTS',
+  $shell              = 'USE_DEFAULTS',
+  $cron_d_file        = '/etc/cron.d/rancid',
+  $cloginrc_content   = 'USE_DEFAULTS',
+  $show_cloginrc_diff = true,
 ) {
 
-  # set default parameters
-
   $default_cloginrc_content = "# This file is being maintained by Puppet.\n# DO NOT EDIT\nConsult man page for cloginrc(5) for help."
+
+  $cloginrc_path = "${homedir_real}/.cloginrc"
 
   case $::osfamily {
     default: {
@@ -138,9 +139,8 @@ class rancid (
   validate_absolute_path($logdir_real)
   validate_absolute_path($shell_real)
   validate_absolute_path($cron_d_file)
-
-  $cloginrc_path = "${homedir_real}/.cloginrc"
   validate_absolute_path($cloginrc_path)
+  validate_bool($show_cloginrc_diff)
 
   package { $packages_real:
     ensure => present,
@@ -208,11 +208,12 @@ class rancid (
   }
 
   file { 'rancid_cloginrc':
-    ensure  => file,
-    path    => $cloginrc_path,
-    owner   => $user_real,
-    group   => $group_real,
-    mode    => '0600',
-    content => $cloginrc_content_real,
+    ensure    => file,
+    path      => $cloginrc_path,
+    owner     => $user_real,
+    group     => $group_real,
+    mode      => '0600',
+    show_diff => $show_cloginrc_diff,
+    content   => $cloginrc_content_real,
   }
 }
