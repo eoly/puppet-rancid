@@ -13,7 +13,9 @@ capability to add router entries to your router.db file with Hiera. Also manages
 
 # Compatibility
 
-Compatible with Puppet v3.2 to v3.7 with Ruby versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0 on the following platforms.
+Compatible with Puppet v3 (starting at version 3.2.0) with and without
+the future parser and Puppet v4 with Ruby versions 1.8.7, 1.9.3, 2.0.0,
+2.1.0 and 2.3.1 on the following platforms.
 
 * EL 6 (rancid package from [EPEL](https://fedoraproject.org/wiki/EPEL))
 * Ubuntu 12.04 LTS

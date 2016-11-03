@@ -15,7 +15,7 @@ define rancid::router_db (
 
   if ( $devices[$name] ) {
     file { "${rancid::homedir_real}/${name}/router.db":
-      ensure  => 'present',
+      ensure  => 'file',
       owner   => $rancid::user_real,
       group   => $rancid::group_real,
       mode    => $router_db_mode,
