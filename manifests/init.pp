@@ -27,8 +27,6 @@ class rancid (
 
   $default_cloginrc_content = "# This file is being maintained by Puppet.\n# DO NOT EDIT\nConsult man page for cloginrc(5) for help."
 
-  $cloginrc_path = "${homedir_real}/.cloginrc"
-
   case $::osfamily {
     default: {
       notify { "Rancid is unsupported for ${::operatingsystem}.": }
@@ -97,6 +95,8 @@ class rancid (
   } else {
     $homedir_real = $homedir
   }
+
+  $cloginrc_path = "${homedir_real}/.cloginrc"
 
   if $logdir == 'USE_DEFAULTS' {
     $logdir_real = $default_logdir
@@ -179,7 +179,7 @@ class rancid (
   }
 
   file { 'rancid_config':
-    ensure  => present,
+    ensure  => 'file',
     path    => $rancid_config_real,
     owner   => $user_real,
     group   => $group_real,
@@ -189,7 +189,7 @@ class rancid (
   }
 
   file { 'rancid_cron_d_file':
-    ensure  => present,
+    ensure  => 'file',
     path    => $cron_d_file,
     owner   => 'root',
     group   => 'root',

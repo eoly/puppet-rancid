@@ -9,6 +9,6 @@
   "issues_url": "https://github.com/eoly/puppet-rancid/issues",
   "description": "Manages RANCID including configuring your devices in their groups router.db files.",
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0 < 5.0.0"}
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.6.0 < 5.0.0"}
   ]
 }
