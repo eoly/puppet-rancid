@@ -24,14 +24,14 @@ TMPDIR=/tmp; export TMPDIR
 BASEDIR=<%= @homedir_real %>; export BASEDIR
 PATH=<%= @rancid_path_env_real %>; export PATH
 # Location of the CVS/SVN repository.  Be careful changing this.
-CVSROOT=$BASEDIR/CVS; export CVSROOT
+CVSROOT=<%= @vcsroot_real %>; export CVSROOT
 # Location of log files produced by rancid-run(1).
 LOGDIR=<%= @logdir_real %>; export LOGDIR
 #
 # Select which RCS system to use, "cvs" (default) or "svn".  Do not change
 # this after CVSROOT has been created with rancid-cvs.  Changing between these
 # requires manual conversions.
-RCSSYS=cvs; export RCSSYS
+RCSSYS=<%= @vcs_real %>; export RCSSYS
 #
 # if ACLSORT is NO, access-lists will NOT be sorted.
 #ACLSORT=YES; export ACLSORT

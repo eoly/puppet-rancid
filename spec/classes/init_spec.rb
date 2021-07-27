@@ -45,4 +45,86 @@ describe 'rancid' do
     end
   end
 
+  context 'version control systems' do
+    let(:facts) { { :osfamily => 'Debian' } }
+    context 'cvs' do
+      let(:params) { {:vcs => 'cvs'} }
+      it { is_expected.to contain_file('rancid_config')
+                            .with_content(/^RCSSYS=cvs;/)
+                            .with_content(/^CVSROOT=\$BASEDIR\/CVS;/)
+      }
+    end
+
+    context 'cvs with a root' do
+      let(:params) { {:vcs => 'cvs', :vcsroot => '/my/repo'} }
+      it { is_expected.to contain_file('rancid_config')
+                            .with_content(/^RCSSYS=cvs;/)
+                            .with_content(/^CVSROOT=\/my\/repo;/)
+      }
+    end
+
+    context 'svn' do
+      let(:params) { {:vcs => 'svn'} }
+      it { is_expected.to contain_file('rancid_config')
+                            .with_content(/^CVSROOT=\$BASEDIR\/svn;/)
+                            .with_content(/^RCSSYS=svn;/)
+      }
+    end
+
+    context 'svn with a root' do
+      let(:params) { {:vcs => 'svn', :vcsroot => '/my/repo'} }
+      it { is_expected.to contain_file('rancid_config')
+                            .with_content(/^RCSSYS=svn;/)
+                            .with_content(/^CVSROOT=\/my\/repo;/)
+      }
+    end
+
+    context 'git' do
+      let(:params) { {:vcs => 'git'} }
+      it { is_expected.to contain_file('rancid_config')
+                            .with_content(/^CVSROOT=\$BASEDIR\/.git;/)
+                            .with_content(/^RCSSYS=git;/)
+      }
+    end
+
+    context 'git with a root' do
+      let(:params) { {:vcs => 'git', :vcsroot => '/my/repo'} }
+      it { is_expected.to contain_file('rancid_config')
+                            .with_content(/^RCSSYS=git;/)
+                            .with_content(/^CVSROOT=\/my\/repo;/)
+      }
+    end
+
+    context 'manage_packages' do
+      context 'true - git' do
+        let(:params) { {:vcs => 'git', :manage_vcs_packages => true} }
+        it { is_expected.to contain_package('git') }
+        it { is_expected.not_to contain_package('subversion') }
+        it { is_expected.not_to contain_package('cvs') }
+      end
+
+      context 'true - svn' do
+        let(:params) { {:vcs => 'svn', :manage_vcs_packages => true} }
+        it { is_expected.not_to contain_package('git') }
+        it { is_expected.to contain_package('subversion') }
+        it { is_expected.not_to contain_package('cvs') }
+      end
+
+      context 'true - cvs' do
+        let(:params) { {:vcs => 'cvs', :manage_vcs_packages => true} }
+        it { is_expected.not_to contain_package('git') }
+        it { is_expected.not_to contain_package('subversion') }
+        it { is_expected.to contain_package('cvs') }
+      end
+
+      context 'false' do
+        let(:params) { {:vcs => 'git', :manage_vcs_packages => false} }
+        it { is_expected.not_to contain_package('git') }
+        it { is_expected.not_to contain_package('subversion') }
+        it { is_expected.not_to contain_package('cvs') }
+      end
+    end
+
+  end
+
 end
