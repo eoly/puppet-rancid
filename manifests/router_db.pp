@@ -5,6 +5,7 @@ define rancid::router_db (
   $rancid_cvs_path = '/bin:/usr/bin',
   $router_db_mode  = '0640',
 ) {
+  include rancid
 
   exec { "rancid-cvs-${name}":
     command => "rancid-cvs ${name}",
