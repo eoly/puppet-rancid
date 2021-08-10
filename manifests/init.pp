@@ -3,26 +3,29 @@
 # Manage RANCID - http://www.shrubbery.net/rancid/
 #
 class rancid (
-  $filterpwds         = 'ALL', # yes, no, all
-  $nocommstr          = 'YES', # yes or no
-  $maxrounds          = '4',
-  $oldtime            = '4',
-  $locktime           = '4',
-  $parcount           = '5',
-  $maildomain         = undef,
-  $groups             = [ 'routers', 'switches', 'firewalls' ],
-  $devices            = undef,
-  $packages           = 'USE_DEFAULTS',
-  $rancid_config      = 'USE_DEFAULTS',
-  $rancid_path_env    = 'USE_DEFAULTS',
-  $homedir            = 'USE_DEFAULTS',
-  $logdir             = 'USE_DEFAULTS',
-  $user               = 'USE_DEFAULTS',
-  $group              = 'USE_DEFAULTS',
-  $shell              = 'USE_DEFAULTS',
-  $cron_d_file        = '/etc/cron.d/rancid',
-  $cloginrc_content   = 'USE_DEFAULTS',
-  $show_cloginrc_diff = true,
+  $filterpwds          = 'ALL', # yes, no, all
+  $nocommstr           = 'YES', # yes or no
+  $maxrounds           = '4',
+  $oldtime             = '4',
+  $locktime            = '4',
+  $parcount            = '5',
+  $maildomain          = undef,
+  $groups              = [ 'routers', 'switches', 'firewalls' ],
+  $devices             = undef,
+  $packages            = 'USE_DEFAULTS',
+  $rancid_config       = 'USE_DEFAULTS',
+  $rancid_path_env     = 'USE_DEFAULTS',
+  $homedir             = 'USE_DEFAULTS',
+  $logdir              = 'USE_DEFAULTS',
+  $user                = 'USE_DEFAULTS',
+  $group               = 'USE_DEFAULTS',
+  $shell               = 'USE_DEFAULTS',
+  $cron_d_file         = '/etc/cron.d/rancid',
+  $cloginrc_content    = 'USE_DEFAULTS',
+  $show_cloginrc_diff  = true,
+  $vcs                 = 'USE_DEFAULTS',
+  $vcsroot             = 'USE_DEFAULTS',
+  $manage_vcs_packages = false,
 ) {
 
   $default_cloginrc_content = "# This file is being maintained by Puppet.\n# DO NOT EDIT\nConsult man page for cloginrc(5) for help."
@@ -116,6 +119,46 @@ class rancid (
     $rancid_path_env_real = $rancid_path_env
   }
 
+  if $vcs == 'USE_DEFAULTS' {
+    $vcs_real = 'cvs'
+  } else {
+    validate_re($vcs, '^(cvs|svn|git)$', "rancid::vcs is ${vcs} and must be one of [cvs, svn, git]")
+    $vcs_real = $vcs
+  }
+
+  if $vcsroot == 'USE_DEFAULTS' {
+    case $vcs_real {
+      default: {
+        fail("Rancid does not support vcs ${vcs_real}.")
+      }
+      'cvs': {
+        $vcsroot_real = '$BASEDIR/CVS'
+      }
+      'svn': {
+        $vcsroot_real = '$BASEDIR/svn'
+      }
+      'git': {
+        $vcsroot_real = '$BASEDIR/.git'
+      }
+    }
+  } else {
+    $vcsroot_real = $vcsroot
+  }
+
+  # Debian and RedHat (currently) use the same names for these packages, so no
+  # need to switch on osfamily
+  case $vcs_real {
+    'cvs': {
+      $vcs_packages = ['cvs']
+    }
+    'svn': {
+      $vcs_packages = ['subversion']
+    }
+    'git': {
+      $vcs_packages = ['git']
+    }
+  }
+
   # validate parameters
   validate_re($filterpwds, '^(yes|YES|no|NO|all|ALL)$',
     "rancid::filterpwds is <${filterpwds}> which does not match the regex of \'YES\', \'NO\', or \'ALL\'.")
@@ -144,6 +187,12 @@ class rancid (
 
   package { $packages_real:
     ensure => present,
+  }
+
+  if ($manage_vcs_packages) {
+    package { $vcs_packages:
+      ensure => present,
+    }
   }
 
   group { 'rancid_group':
