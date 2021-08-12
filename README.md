@@ -162,6 +162,24 @@ Whether to show diffs of <tt>~rancid/.cloginrc</tt> during puppet runs.
 
 - *Default*: true
 
+vcs
+---
+Which version control system to use.  Must be one of git, svn, cvs or USE_DEFAULTS.
+
+- *Default*: 'USE_DEFAULTS'
+
+vcsroot
+-------
+Use a different directory than the default for the vcs you've chosen.
+
+- *Default*: 'USE_DEFAULTS'
+
+manage_vcs_packages
+-------------------
+If true, we will ensure that the appropriate packages are installed for the vcs you've chosen.
+
+- *Default*: false
+
 ===
 
 # define rancid::router_db
