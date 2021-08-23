@@ -1,4 +1,4 @@
-<%- @devices[@name].each_pair do |key, hash| -%>
-<%=hash['hostname']-%>:<%=hash['type']-%>:<%=hash['status']-%>
+<%- @devices[@name].keys.sort.each do |key| -%>
+<%= @devices[@name][key]['hostname']-%>;<%=@devices[@name][key]['type']-%>;<%=@devices[@name][key]['status']-%>
 
 <%- end -%>

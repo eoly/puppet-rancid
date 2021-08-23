@@ -20,6 +20,8 @@ the future parser and Puppet v4 with Ruby versions 1.8.7, 1.9.3, 2.0.0,
 * EL 6 (rancid package from [EPEL](https://fedoraproject.org/wiki/EPEL))
 * Ubuntu 12.04 LTS
 
+* The module now requires rancid > 3.0 (released 2 Apr 2014)
+
 ===
 
 # class rancid
