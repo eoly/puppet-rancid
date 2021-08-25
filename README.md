@@ -209,6 +209,18 @@ Mode of <tt>router.db</tt> files.
 
 - *Default*: '0640',
 
+log_retention
+-------------
+
+If set, a cron job will be setup that will delete logs older than the
+specification given.
+
+Example specifications are:
+
+* 3d - will delete logs older than 3 days
+* 2w - will delete logs older than 2 weeks
+* 1m - will delete logs older than 1 month (approximated as 30 days ;-) )
+
 ===
 
 Sample Hiera Structure

@@ -26,6 +26,7 @@ class rancid (
   $vcs                 = 'USE_DEFAULTS',
   $vcsroot             = 'USE_DEFAULTS',
   $manage_vcs_packages = false,
+  $log_retention       = undef,
 ) {
 
   $default_cloginrc_content = "# This file is being maintained by Puppet.\n# DO NOT EDIT\nConsult man page for cloginrc(5) for help."
@@ -235,6 +236,22 @@ class rancid (
     mode    => '0640',
     content => template('rancid/rancid.conf.erb'),
     require => Package[$packages_real],
+  }
+
+  case $log_retention {
+    undef: {} # Permit no log_retention specification
+    /^(\d+)d$/: {
+      $retention_days = $1 - 1
+    }
+    /^(\d+)w$/: {
+      $retention_days = $1 * 7 - 1
+    }
+    /^(\d+)m$/: {
+      $retention_days = $1 * 30 - 1 # 30 approximates one month
+    }
+    default: {
+      fail("Log retention '${log_retention}' was not recognised")
+    }
   }
 
   file { 'rancid_cron_d_file':

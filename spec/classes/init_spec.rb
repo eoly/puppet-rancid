@@ -127,4 +127,74 @@ describe 'rancid' do
 
   end
 
+  context 'log retention' do
+    let(:facts) { { :osfamily => 'Debian' } }
+
+    context 'no log_retention' do
+      let(:params) {
+        {
+        }
+      }
+
+      it 'should not set up a cron job to delete logs' do
+        is_expected.to contain_file('rancid_cron_d_file')
+                         .with_path('/etc/cron.d/rancid')
+                         .without_content(/find \/var\/log\/rancid\/ .* -delete$/m)
+      end
+    end
+
+    context 'n days' do
+      let(:params) {
+        {
+          :log_retention => '13d',
+        }
+      }
+
+      it 'should set up a cron job to delete logs older than 13 days' do
+        is_expected.to contain_file('rancid_cron_d_file')
+                         .with_path('/etc/cron.d/rancid')
+                         .with_content(/^5 \* \* \* \* rancid find \/var\/log\/rancid\/ -type f -mtime \+12 -delete$/m)
+      end
+    end
+
+    context 'n weeks' do
+      let(:params) {
+        {
+          :log_retention => '2w',
+        }
+      }
+
+      it 'should set up a cron job to delete logs older than 2 weeks' do
+        is_expected.to contain_file('rancid_cron_d_file')
+                         .with_path('/etc/cron.d/rancid')
+                         .with_content(/^5 \* \* \* \* rancid find \/var\/log\/rancid\/ -type f -mtime \+13 -delete$/m)
+      end
+    end
+
+    context 'n months' do
+      let(:params) {
+        {
+          :log_retention => '1m',
+        }
+      }
+
+      it 'should set up a cron job to delete logs older than 1 month' do
+        is_expected.to contain_file('rancid_cron_d_file')
+                         .with_path('/etc/cron.d/rancid')
+                         .with_content(/^5 \* \* \* \* rancid find \/var\/log\/rancid\/ -type f -mtime \+29 -delete$/m)
+      end
+    end
+
+    context 'other' do
+      let(:params) {
+        {
+          :log_retention => 'foobar',
+        }
+      }
+
+      it 'should error with an invalid parameter' do
+        is_expected.to compile.and_raise_error(/Log retention 'foobar' was not recognised/)
+      end
+    end
+  end
 end

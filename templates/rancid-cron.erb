@@ -7,3 +7,7 @@ HOME=<%= @homedir_real %>
 
 # Run config differ hourly
 1 * * * * <%= @user_real %> rancid-run
+<% if has_variable?("log_retention") -%>
+
+5 * * * * <%= @user_real %> find <%= @default_logdir %>/ -type f -mtime +<%= @retention_days %> -delete
+<%- end %>
