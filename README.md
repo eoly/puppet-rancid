@@ -182,6 +182,12 @@ If true, we will ensure that the appropriate packages are installed for the vcs 
 
 - *Default*: false
 
+vcs_remote_urls
+---------------
+Hash (keyed by group name) of remote urls. See Sample Hiera Structure.
+
+- *Default*: undef
+
 ===
 
 # define rancid::router_db
@@ -254,6 +260,11 @@ rancid::devices:
       type: 'cisco',
       status: 'up'
     }
+
+rancid::vcs_remote_urls:
+  routers: git@github.com/me/my-routers.git
+  switches: git@github.com/me/my-switches.git
+  firewalls: git@github.com/me/my-firewalls.git
 </pre>
 
 ===
